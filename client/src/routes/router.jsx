@@ -1,17 +1,17 @@
-import App from '../App'
-import AllTasks from '../pages/AllTasks'
-import Today from '../pages/Today'
-import Overdue from '../pages/Overdue'
-import { createBrowserRouter } from 'react-router-dom'
+import App from "../App";
+import AllTasks from "../pages/AllTasks";
+import Today from "../pages/Today";
+import Complete from "../pages/Complete";
+import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <App />,
     children: [
       { index: true, element: <AllTasks /> },
-      { path: 'today', element: <Today /> },
-      { path: 'overdue', element: <Overdue /> },
+      { path: "today", element: <Today /> },
+      { path: "complete", element: <Complete /> },
     ],
   },
-])
+]);

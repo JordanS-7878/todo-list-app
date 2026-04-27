@@ -1,8 +1,14 @@
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, Empty } from "antd";
+
 export default function AllTasks() {
   return (
     <div>
-      <h2 className="text-3xl font-bold">Home Page</h2>
-      <p className="mt-2">Welcome to your dashboard.</p>
+      <div className="mb-4 text-3xl font-semibold">All Tasks</div>
+      <Button type="primary" icon={<PlusOutlined />}>
+        Add task
+      </Button>
+      <Empty description={"No task - Create one to get started."} />
     </div>
-  )
+  );
 }
