@@ -1,11 +1,15 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 // import custom route file
-import records from "./routes/record.js";
+import taskRoutes from "./routes/taskRoutes.js";
+import { connectDB } from "./db/connection.js";
 
-const PORT = process.env.PORT || 5050
+dotenv.config();
+
 // create the app
 const app = express();
+const PORT = process.env.PORT || 5050;
 
 // enables cross-origin requests
 app.use(cors());
@@ -13,8 +17,10 @@ app.use(cors());
 // without this, req.body would be undefined when sending JSON
 app.use(express.json());
 
-// route mounting: if record.js have route.get("/") and route.post("/add"), they become GET /record and POST /record/add
-app.use("/record", records);
+// connect DB
+connectDB();
+
+app.use("/api/tasks", taskRoutes); // Additional `/api` prefix for better API organization
 
 // start the Express server
 // listen for requests at port 5050
