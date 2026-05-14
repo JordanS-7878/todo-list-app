@@ -14,7 +14,7 @@ export default function AllTasks() {
   const { openDrawer } = useDrawer();
   const [query, setQuery] = useState("");
 
-  const incompletedTasks = tasks.filter((task) => !task.completed);
+  const incompletedTasks = tasks?.filter((task) => !task.completed);
   const filteredTask = useTaskSearch(incompletedTasks, query);
   const groupedTasks = useGroupedTasks(filteredTask || []);
   const groupOrder = [

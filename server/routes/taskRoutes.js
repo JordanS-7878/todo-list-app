@@ -1,4 +1,5 @@
 import express from "express";
+import { protect } from "../middleware/authMiddleware.js";
 import Task from "../model/Task.js";
 
 const router = express.Router();
@@ -13,11 +14,12 @@ const router = express.Router();
   500 - Internal Server Error (something broke on server)
 */
 
-// GET all tasks
-router.get("/", async (req, res) => {
+// GET user-specific tasks
+router.get("/", protect, async (req, res) => {
   try {
-    const tasks = await Task.find();
-    res.status(200).json(tasks);
+    const userId = req.user.id;
+    const tasks = await Task.find({ userId: userId });
+    res.status(200).json({ message: "Task found successfully", tasks });
   } catch (err) {
     res
       .status(500)
@@ -26,10 +28,10 @@ router.get("/", async (req, res) => {
 });
 
 // CREATE task
-router.post("/", async (req, res) => {
+router.post("/", protect, async (req, res) => {
   try {
-    const task = await Task.create(req.body);
-    res.status(201).json(task);
+    const task = await Task.create({ ...req.body, userId: req.user.id });
+    res.status(200).json({ message: "Task created successfully", task });
   } catch (err) {
     res.status(400).json({
       message: "Failed to create task",
@@ -39,7 +41,7 @@ router.post("/", async (req, res) => {
 });
 
 // UPDATE task
-router.put("/:id", async (req, res) => {
+router.put("/:id", protect, async (req, res) => {
   try {
     const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
       new: true, // Return newly updated document instead of the old one
@@ -49,7 +51,7 @@ router.put("/:id", async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    res.status(201).json(task);
+    res.status(200).json({ message: "Task updated successfully", task });
   } catch (err) {
     res
       .status(400)
@@ -58,7 +60,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE task
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", protect, async (req, res) => {
   try {
     const task = await Task.findByIdAndDelete(req.params.id);
 
@@ -66,7 +68,7 @@ router.delete("/:id", async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    res.status(200).json({ message: "Deleted successfully" });
+    res.status(200).json({ message: "Task deleted successfully", task });
   } catch (err) {
     res
       .status(500)

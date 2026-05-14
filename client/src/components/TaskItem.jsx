@@ -2,7 +2,7 @@ import { ClockCircleOutlined } from "@ant-design/icons";
 import { Checkbox } from "antd";
 import { useDrawer } from "../context/DrawerContext";
 import { useTasks } from "../hooks/useTasks";
-import { updateTaskService } from "../services/taskService";
+import { updateTask } from "../api/tasks";
 import { formatTime } from "../utils/date";
 import { showMessage } from "../utils/message";
 
@@ -12,7 +12,7 @@ export default function TaskItem({ task }) {
 
   const handleUpdateTask = async () => {
     try {
-      await updateTaskService(task._id, {
+      await updateTask(task._id, {
         completed: !task.completed,
       });
 

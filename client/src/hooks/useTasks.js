@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
+import { getTasks } from "../api/tasks";
 import { TasksContext } from "../context/TasksContext";
-import { getTasksService } from "../services/taskService";
 
 export const useTasks = () => {
   const { tasks, setTasks, activeTask, setActiveTask } =
@@ -8,8 +8,8 @@ export const useTasks = () => {
 
   const fetchTasks = async () => {
     try {
-      const data = await getTasksService();
-      setTasks(data);
+      const response = await getTasks();
+      setTasks(response.tasks);
     } catch (err) {
       console.error("Failed to fetch tasks", err);
     }

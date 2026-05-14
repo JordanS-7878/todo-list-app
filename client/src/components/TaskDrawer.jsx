@@ -9,11 +9,7 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useDrawer } from "../context/DrawerContext";
 import { useTasks } from "../hooks/useTasks";
-import {
-  createTaskService,
-  deleteTaskService,
-  updateTaskService,
-} from "../services/taskService";
+import { createTask, deleteTask, updateTask } from "../api/tasks";
 import { showMessage } from "../utils/message";
 
 export default function TaskDrawer({ open, onClose }) {
@@ -25,11 +21,11 @@ export default function TaskDrawer({ open, onClose }) {
   const [dateTime, setDateTime] = useState(null);
 
   const isEditMode = !!activeTask;
-  const isReadMode = activeTask && !!activeTask.completed;
+  const isReadMode = Boolean(activeTask?.completed);
 
   const handleAddTask = async () => {
     try {
-      const task = await createTaskService({
+      const task = await createTask({
         title,
         notes,
         dateTime: dateTime?.toISOString() || null,
@@ -47,7 +43,7 @@ export default function TaskDrawer({ open, onClose }) {
 
   const handleUpdateTask = async () => {
     try {
-      await updateTaskService(activeTask._id, {
+      await updateTask(activeTask._id, {
         title,
         notes,
         dateTime: dateTime?.toISOString() || null,
@@ -64,7 +60,7 @@ export default function TaskDrawer({ open, onClose }) {
 
   const handleDeleteTask = async () => {
     try {
-      await deleteTaskService(activeTask._id);
+      await deleteTask(activeTask._id);
 
       fetchTasks();
       resetForm();
@@ -86,8 +82,8 @@ export default function TaskDrawer({ open, onClose }) {
 
   useEffect(() => {
     if (activeTask) {
-      setTitle(activeTask.title);
-      setNotes(activeTask.notes);
+      setTitle(activeTask.title ?? "");
+      setNotes(activeTask.notes ?? "");
       setDateTime(activeTask.dateTime ? dayjs(activeTask.dateTime) : null);
     } else {
       resetForm();
@@ -143,7 +139,7 @@ export default function TaskDrawer({ open, onClose }) {
               type="primary"
               icon={<PlusOutlined />}
               onClick={handleAddTask}
-              disabled={!title.trim()} // `.trim()` to prevent adding tasks with only whitespaces
+              disabled={!title?.trim()} // `.trim()` to prevent adding tasks with only whitespaces
             />
           )}
           {isEditMode && (
@@ -159,7 +155,7 @@ export default function TaskDrawer({ open, onClose }) {
               type="primary"
               icon={<SaveOutlined />}
               onClick={handleUpdateTask}
-              disabled={!title.trim()}
+              disabled={!title?.trim()}
             />
           )}
         </div>
