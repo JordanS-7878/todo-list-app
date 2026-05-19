@@ -7,16 +7,22 @@ import Profile from "../pages/Profile";
 import SignIn from "../pages/SignIn";
 import SignUp from "../pages/SignUp";
 import Today from "../pages/Today";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
-    element: <App />,
+    element: <ProtectedRoute />,
     children: [
-      { index: true, element: <AllTasks /> },
-      { path: "today", element: <Today /> },
-      { path: "completed", element: <Completed /> },
-      { path: "profile", element: <Profile /> },
+      {
+        path: "/",
+        element: <App />,
+        children: [
+          { index: true, element: <AllTasks /> },
+          { path: "today", element: <Today /> },
+          { path: "completed", element: <Completed /> },
+          { path: "profile", element: <Profile /> },
+        ],
+      },
     ],
   },
   {

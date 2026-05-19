@@ -59,9 +59,9 @@ export default function App() {
                   />
                   <div className="flex flex-col justify-center">
                     <div className="font-semibold">{fullName}</div>
-                    <Tooltip title={user.email}>
+                    <Tooltip title={user?.email}>
                       <div className="text-gray-400 max-w-[150px] truncate">
-                        {user.email}
+                        {user?.email}
                       </div>
                     </Tooltip>
                   </div>

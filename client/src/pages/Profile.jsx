@@ -147,7 +147,7 @@ export default function Profile() {
           Save
         </Button>
       </div>
-      <div className="flex">
+      <div className="flex gap-12">
         <Button
           className="flex-1"
           type="primary"
