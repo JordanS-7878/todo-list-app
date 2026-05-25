@@ -11,6 +11,11 @@ import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
+    /* 
+      Protect all routes inside this wrapper,
+      if user is not authenticated,
+      ProtectedRoute redirects them to sign-in page
+    */
     element: <ProtectedRoute />,
     children: [
       {

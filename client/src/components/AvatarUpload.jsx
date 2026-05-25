@@ -1,10 +1,14 @@
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { message, Upload } from "antd";
+import {
+  LoadingOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
+import { message, Upload, Image, Avatar } from "antd";
 import { useState } from "react";
 
 export default function AvatarUpload({
-  value,
-  onChange,
+  image,
+  setImage,
   action,
   name = "image",
   size = 2,
@@ -41,10 +45,9 @@ export default function AvatarUpload({
     if (info.file.status === "done") {
       setLoading(false);
 
-      // backend response
       const imageUrl = info.file.response?.user?.image;
 
-      onChange?.(imageUrl);
+      setImage?.(imageUrl);
     }
 
     if (info.file.status === "error") {
@@ -59,6 +62,7 @@ export default function AvatarUpload({
       style={{
         border: 0,
         background: "none",
+        cursor: "pointer",
       }}
     >
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -77,25 +81,55 @@ export default function AvatarUpload({
         headers={{
           Authorization: `Bearer ${token}`,
         }}
-        listType="picture-circle"
+        listType="picture-circle" // ~104px × 104px
         showUploadList={false}
         beforeUpload={beforeUpload}
         onChange={handleChange}
         disabled={disabled}
         maxCount={1}
       >
-        {value ? (
-          <img
-            src={`http://localhost:5050${value}`}
-            alt="avatar"
-            draggable={false}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "50%",
-            }}
-          />
+        {image ? (
+          // <Image
+          //   src={`http://localhost:5050${image}`}
+          //   alt="avatar"
+          //   preview={false}
+          //   draggable={false}
+          //   width="100%"
+          //   height="100%"
+          //   style={{
+          //     objectFit: "cover",
+          //     borderRadius: "50%",
+          //   }}
+          // />
+          <div style={{ position: "relative", display: "inline-block" }}>
+            <Avatar
+              size={104}
+              src={image ? `http://localhost:5050${image}` : null}
+            />
+
+            {image && (
+              <button
+                onClick={(e) => {
+                  setImage?.("");
+                  e.stopPropagation();
+                }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  border: "none",
+                  background: "red",
+                  color: "white",
+                  borderRadius: "50%",
+                  width: 24,
+                  height: 24,
+                  cursor: "pointer",
+                }}
+              >
+                <DeleteOutlined />
+              </button>
+            )}
+          </div>
         ) : (
           uploadButton
         )}

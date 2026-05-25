@@ -55,6 +55,10 @@ router.put("/me", protect, upload.single("image"), async (req, res) => {
       updatedData.image = `/uploads/${req.file.filename}`;
     }
 
+    if (req.body.image === "") {
+      updatedData.image = "";
+    }
+
     const user = await User.findByIdAndUpdate(id, updatedData, {
       new: true,
       runValidators: true,

@@ -45,6 +45,8 @@ export default function Profile() {
 
       if (image) {
         formData.append("image", image);
+      } else {
+        formData.append("image", image || "");
       }
 
       const data = await updateCurrentUser(formData);
@@ -62,12 +64,12 @@ export default function Profile() {
       await deleteCurrentUser();
 
       localStorage.removeItem("token");
-      setUser(null);
 
       showMessage.success("User deleted");
 
       setTimeout(() => {
         navigate("/authentication/sign-up");
+        setUser(null);
       }, 2000);
     } catch (err) {
       console.error("Failed to delete user", err);
@@ -79,8 +81,8 @@ export default function Profile() {
     <div className="flex flex-col gap-6">
       <div className="text-4xl font-bold">Profile</div>
       <AvatarUpload
-        value={image}
-        onChange={setImage}
+        image={image}
+        setImage={setImage}
         action="http://localhost:5050/api/users/me"
       />
       <Divider className="!my-0" />
